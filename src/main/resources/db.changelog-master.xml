@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="init" author="tabatskiy">
+        <createTable tableName="client">
+            <column name="id" type="SERIAL" autoIncrement="true">
+                <constraints unique="true" nullable="false" primaryKey="true"/>
+            </column>
+            <column name="email" type="VARCHAR(128)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_client_role" author="tabatskiy">
+        <createTable tableName="client_role">
+            <column name="id" type="SERIAL" autoIncrement="true">
+                <constraints unique="true" nullable="false" primaryKey="true"/>
+            </column>
+            <column name="client_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="client_role" baseColumnNames="client_id"
+                                 constraintName="client_role_client_id"
+                                 referencedTableName="client" referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="create_account_table" author="tabatskiy">
+        <createTable tableName="account">
+            <column name="id" type="SERIAL" autoIncrement="true">
+                <constraints unique="true" nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="balance" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="client_id" type="INT">
+                <constraints nullable="false" foreignKeyName="fk_account_client" references="client(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_transaction_table" author="tabatskiy">
+        <createTable tableName="transaction">
+            <column name="id" type="SERIAL" autoIncrement="true">
+                <constraints unique="true" nullable="false" primaryKey="true"/>
+            </column>
+            <column name="from_account_id" type="INT">
+                <constraints nullable="true" foreignKeyName="fk_from_transaction_account" references="account(id)"/>
+            </column>
+            <column name="to_account_id" type="INT">
+                <constraints nullable="true" foreignKeyName="fk_to_transaction_account" references="account(id)"/>
+            </column>
+            <column name="amount" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_category_table" author="tabatskiy">
+        <createTable tableName="category">
+            <column name="id" type="SERIAL" autoIncrement="true">
+                <constraints unique="true" nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="client_id" type="INT">
+                <constraints nullable="false" foreignKeyName="fk_category_client" references="client(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_transaction_to_category_table" author="tabatskiy">
+        <createTable tableName="transaction_to_category">
+            <column name="id" type="SERIAL" autoIncrement="true">
+                <constraints unique="true" nullable="false" primaryKey="true"/>
+            </column>
+            <column name="transaction_id" type="INT">
+                <constraints nullable="false" foreignKeyName="fk_transaction_to_category_transaction"
+                             references="transaction(id)"/>
+            </column>
+            <column name="category_id" type="INT">
+                <constraints nullable="false" foreignKeyName="fk_transaction_to_category_category"
+                             references="category(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

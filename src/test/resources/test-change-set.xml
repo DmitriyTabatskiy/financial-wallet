@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <include file="db.changelog-master.xml"></include>
+
+    <changeSet id="test_client" author="tabatskiy">
+        <insert tableName="client">
+            <column name="email">yana@gmail.com</column>
+            <column name="password">$2a$12$36u2w7onH2qmrIevlrGIMOmVB4flgNv8oIBFLyT3GNAcL.ZBamQTq</column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="test_client_role" author="tabatskiy">
+        <insert tableName="client_role">
+            <column name="client_id">1</column>
+            <column name="role">USER</column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="test_account" author="tabatskiy">
+        <insert tableName="account">
+            <column name="name">alfa</column>
+            <column name="balance">1000</column>
+            <column name="client_id">1</column>
+        </insert>
+
+        <insert tableName="account">
+            <column name="name">privat24</column>
+            <column name="balance">3000</column>
+            <column name="client_id">1</column>
+        </insert>
+
+        <insert tableName="account">
+            <column name="name">testBank</column>
+            <column name="balance">3000</column>
+            <column name="client_id">1</column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="test_category" author="tabatskiy">
+        <insert tableName="category">
+            <column name="name">бензин</column>
+            <column name="client_id">1</column>
+        </insert>
+
+        <insert tableName="category">
+            <column name="name">зарплата</column>
+            <column name="client_id">1</column>
+        </insert>
+
+        <insert tableName="category">
+            <column name="name">перевод</column>
+            <column name="client_id">1</column>
+        </insert>
+
+        <insert tableName="category">
+            <column name="name">аптека</column>
+            <column name="client_id">1</column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="test_transaction" author="tabatskiy">
+        <insert tableName="transaction">
+            <column name="from_account_id">1</column>
+            <column name="to_account_id"></column>
+            <column name="amount">500</column>
+            <column name="created_date">2023-02-04 11:26:10.072863</column>
+        </insert>
+
+        <insert tableName="transaction">
+            <column name="from_account_id"></column>
+            <column name="to_account_id">2</column>
+            <column name="amount">2000</column>
+            <column name="created_date">2023-02-06 11:26:10.072863</column>
+        </insert>
+
+        <insert tableName="transaction">
+            <column name="from_account_id">1</column>
+            <column name="to_account_id">2</column>
+            <column name="amount">3000</column>
+            <column name="created_date">2023-02-07 11:26:10.072863</column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="test_transaction_to_category" author="tabatskiy">
+        <insert tableName="transaction_to_category">
+            <column name="transaction_id">1</column>
+            <column name="category_id">1</column>
+        </insert>
+
+        <insert tableName="transaction_to_category">
+            <column name="transaction_id">2</column>
+            <column name="category_id">2</column>
+        </insert>
+
+        <insert tableName="transaction_to_category">
+            <column name="transaction_id">3</column>
+            <column name="category_id">3</column>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
